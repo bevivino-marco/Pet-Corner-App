@@ -10,15 +10,23 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.petcorner.petcorner.ui.theme.Navigation
 import com.petcorner.petcorner.ui.theme.PetCornerTheme
 import com.petcorner.petcorner.view.BottomNavigationBar
+import com.petcorner.petcorner.viewmodel.AnimalViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lateinit var animalViewModel: AnimalViewModel
+
+
+        animalViewModel = ViewModelProvider(
+            this
+        ).get(AnimalViewModel::class.java)
         setContent {
             PetCornerTheme(){
                 val navController = rememberNavController()
@@ -49,7 +57,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) {
-                    Navigation(navController = navController)
+                    Navigation(navController = navController, animalViewModel)
                 }
             }
         }

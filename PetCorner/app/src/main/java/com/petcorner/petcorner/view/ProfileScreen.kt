@@ -21,9 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.petcorner.petcorner.R
+import com.petcorner.petcorner.model.Animal
+import com.petcorner.petcorner.viewmodel.AnimalViewModel
 
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewModel) {
     val nome = "Marco"
     val cognome= "Bevivino"
     val username = "marco.bevivino@gmail.com"
@@ -174,6 +176,10 @@ fun ProfileScreen(navController: NavHostController) {
                             "Aggiungi Animale",
                             Toast.LENGTH_SHORT
                         ).show()
+                        animalViewModel.addAnimal(Animal(
+                            0,"Prova",1,1,"golden","golden","marco","Torino","adislghiud","M"
+                        ))
+
                     }
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "add animal")

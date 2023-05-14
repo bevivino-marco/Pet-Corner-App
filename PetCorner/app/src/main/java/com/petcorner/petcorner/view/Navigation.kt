@@ -5,9 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.petcorner.petcorner.view.*
+import com.petcorner.petcorner.viewmodel.AnimalViewModel
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController, animalViewModel: AnimalViewModel) {
     NavHost(navController = navController, startDestination = "animals") {
         composable("animals") {
             AnimalsScreen()
@@ -22,7 +23,7 @@ fun Navigation(navController: NavHostController) {
             RegistrationScreen(navController)
         }
         composable("profile") {
-            ProfileScreen(navController)
+            ProfileScreen(navController, animalViewModel)
         }
 
     }
