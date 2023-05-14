@@ -4,11 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.petcorner.petcorner.*
-import com.petcorner.petcorner.view.AnimalsScreen
-import com.petcorner.petcorner.view.LoginScreen
-import com.petcorner.petcorner.view.ProfileScreen
-import com.petcorner.petcorner.view.UsersScreen
+import com.petcorner.petcorner.view.*
 
 @Composable
 fun Navigation(navController: NavHostController) {

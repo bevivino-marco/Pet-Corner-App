@@ -20,12 +20,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.petcorner.petcorner.view.functions.onRegisterClick
+import androidx.navigation.NavHostController
 
 @Composable
-fun Login(navController: NavController){
-
+fun RegistrationScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
@@ -34,8 +32,15 @@ fun Login(navController: NavController){
 
         val username = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
+        val citta = remember { mutableStateOf(TextFieldValue()) }
+        val eta = remember { mutableStateOf(TextFieldValue()) }
+        val sitter = ""
+        val trainer = ""
 
-        Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.SansSerif))
+        Text(
+            text = "Registration",
+            style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.SansSerif)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
@@ -52,9 +57,25 @@ fun Login(navController: NavController){
             onValueChange = { password.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Cittá") },
+            value = username.value,
+            onValueChange = { username.value = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Etá") },
+            value = username.value,
+            onValueChange = { username.value = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TrainerCheckBox()
+        Spacer(modifier = Modifier.height(20.dp))
+        SitterCheckBox()
+        Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { },
+                onClick = { navController.navigate("profile") },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -65,29 +86,11 @@ fun Login(navController: NavController){
                 )
             ) {
 
-                Text(text = "LOGIN")
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box(
-            modifier = Modifier
-                .padding(40.dp, 0.dp, 40.dp, 0.dp)
-        ) {
-            Button(
-                onClick = { onRegisterClick(navController) },
-                shape = RoundedCornerShape(50.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Green,
-                    contentColor = Color.Black
-                )
-
-            ) {
                 Text(text = "REGISTER")
             }
-
         }
+
+
     }
+
 }
