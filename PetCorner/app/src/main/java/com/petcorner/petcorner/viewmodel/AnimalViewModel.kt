@@ -13,14 +13,14 @@ import com.petcorner.petcorner.model.Animal
 
 class AnimalViewModel(application: Application): AndroidViewModel(application) {
 
-    private val getAllAnimal: LiveData<List<Animal>>
+    var animals: LiveData<List<Animal>>
     private val repository : AnimalRepository
 
 
     init {
         val dao = AnimalDb.getDatabase(application).animalDao
         repository = AnimalRepository(dao)
-        getAllAnimal = repository.getAllAnimals
+        animals = repository.getAllAnimals
     }
 
 

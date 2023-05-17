@@ -177,7 +177,7 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
                             Toast.LENGTH_SHORT
                         ).show()
                         animalViewModel.addAnimal(Animal(
-                            0,"Prova",1,1,"golden","golden","marco","Torino","adislghiud","M"
+                            0,"Prova",1,1,"golden","golden","marco","Milano","adislghiud","M"
                         ))
 
                     }

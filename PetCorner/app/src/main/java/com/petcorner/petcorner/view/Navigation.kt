@@ -11,7 +11,7 @@ import com.petcorner.petcorner.viewmodel.AnimalViewModel
 fun Navigation(navController: NavHostController, animalViewModel: AnimalViewModel) {
     NavHost(navController = navController, startDestination = "animals") {
         composable("animals") {
-            AnimalsScreen()
+            AnimalsScreen(animalViewModel)
         }
         composable("users") {
             UsersScreen()
