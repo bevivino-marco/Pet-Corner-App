@@ -35,19 +35,19 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(
                             items = listOf(
                                 BottomNavItem(
-                                    name = "Animals",
+                                    name = "Animali",
                                     route = "animals",
-                                    icon = Icons.Default.Star
+                                    icon = Icons.Default.Favorite,
                                 ),
                                 BottomNavItem(
-                                    name = "Users",
+                                    name = "Utenti",
                                     route = "users",
                                     icon = Icons.Default.Person,
                                 ),
                                 BottomNavItem(
-                                    name = "Profile",
+                                    name = "Profilo",
                                     route = "login",
-                                    icon = Icons.Default.Home,
+                                    icon = Icons.Default.Settings,
                                 ),
                             ),
                             navController = navController,

@@ -42,7 +42,7 @@ fun TrainerCheckBox() {
 
         Text(
             modifier = Modifier.padding(start = 2.dp),
-            text = "As Trainer"
+            text = "Trainer"
         )
     }
 }

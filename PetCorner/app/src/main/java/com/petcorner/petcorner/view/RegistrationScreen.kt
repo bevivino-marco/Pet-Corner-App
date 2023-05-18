@@ -1,18 +1,24 @@
 package com.petcorner.petcorner.view
 
+import android.app.DatePickerDialog
+import android.content.Context
+import android.widget.CalendarView
+import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,6 +27,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import java.util.*
 
 @Composable
 fun RegistrationScreen(navController: NavHostController) {
@@ -32,15 +39,10 @@ fun RegistrationScreen(navController: NavHostController) {
 
         val username = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
-        val citta = remember { mutableStateOf(TextFieldValue()) }
-        val eta = remember { mutableStateOf(TextFieldValue()) }
-        val sitter = ""
-        val trainer = ""
-
-        Text(
-            text = "Registration",
-            style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.SansSerif)
-        )
+        val city = remember { mutableStateOf(TextFieldValue()) }
+        val age = remember { mutableStateOf(TextFieldValue()) }
+        val isSitter = ""
+        val isTrainer = ""
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
@@ -63,15 +65,14 @@ fun RegistrationScreen(navController: NavHostController) {
             onValueChange = { username.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text(text = "Etá") },
-            value = username.value,
-            onValueChange = { username.value = it })
+        showDatePicker(LocalContext.current)
 
         Spacer(modifier = Modifier.height(20.dp))
-        TrainerCheckBox()
-        Spacer(modifier = Modifier.height(20.dp))
-        SitterCheckBox()
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            TrainerCheckBox()
+            SitterCheckBox()
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
@@ -79,18 +80,46 @@ fun RegistrationScreen(navController: NavHostController) {
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Green,
-                    contentColor = Color.Black
-                )
+                    .height(50.dp)
             ) {
-
-                Text(text = "REGISTER")
+                Text(text = "Registrati")
             }
         }
-
-
     }
+}
 
+@Composable
+fun showDatePicker(context: Context){
+
+    val year: Int
+    val month: Int
+    val day: Int
+
+    val calendar = Calendar.getInstance()
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.time = Date()
+
+    val date = remember { mutableStateOf("") }
+    val datePickerDialog = DatePickerDialog(
+        context,
+        {_: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            date.value = "$dayOfMonth/$month/$year"
+        }, year, month, day
+    )
+    
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Button(
+            onClick = { datePickerDialog.show() },
+        ) {
+            Icon(
+                Icons.Filled.DateRange,
+                contentDescription = "Favorite",
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+        }
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = "Data di nascita ${date.value}")
+    }
 }
