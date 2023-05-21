@@ -2,7 +2,6 @@ package com.petcorner.petcorner.view
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.widget.CalendarView
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,22 +9,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import java.util.*
 
@@ -65,7 +58,7 @@ fun RegistrationScreen(navController: NavHostController) {
             onValueChange = { username.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
-        showDatePicker(LocalContext.current)
+        ShowDatePicker(LocalContext.current)
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -89,8 +82,7 @@ fun RegistrationScreen(navController: NavHostController) {
 }
 
 @Composable
-fun showDatePicker(context: Context){
-
+fun ShowDatePicker(context: Context){
     val year: Int
     val month: Int
     val day: Int
@@ -108,8 +100,12 @@ fun showDatePicker(context: Context){
             date.value = "$dayOfMonth/$month/$year"
         }, year, month, day
     )
-    
+
     Row(verticalAlignment = Alignment.CenterVertically) {
+        if (date.value == "") {
+            Text(text = "Data di nascita")
+            Spacer(modifier = Modifier.size(16.dp))
+        }
         Button(
             onClick = { datePickerDialog.show() },
         ) {
@@ -119,7 +115,9 @@ fun showDatePicker(context: Context){
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
         }
-        Spacer(modifier = Modifier.size(16.dp))
-        Text(text = "Data di nascita ${date.value}")
+        if (date.value != "") {
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = "${date.value}")
+        }
     }
 }
