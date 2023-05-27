@@ -3,30 +3,38 @@ package com.petcorner.petcorner.view
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.compose.ui.unit.dp
-import com.petcorner.petcorner.R
+import androidx.compose.ui.unit.toSize
 import com.petcorner.petcorner.model.Animal
 import com.petcorner.petcorner.viewmodel.AnimalViewModel
+import java.util.*
 
 //@Composable
 //fun AnimalsScreen() {
@@ -37,8 +45,12 @@ import com.petcorner.petcorner.viewmodel.AnimalViewModel
 //        Text(text = "Animals screen")
 //    }
 //}
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnimalsScreen(animalViewModel: AnimalViewModel) {
+    var filterState = remember { mutableStateOf("ALL") }
+    val animals by animalViewModel.animals.observeAsState(initial = emptyList())
+    val provenances by animalViewModel.provenances.observeAsState(initial = emptyList<String>())
 
 //    val animals =  listOf<AnimalPost>(
 //        AnimalPost(123, "Lullu",2, "2", 2254, "Torino", true, false),
@@ -55,14 +67,19 @@ fun AnimalsScreen(animalViewModel: AnimalViewModel) {
 //
 //
 //    );
-    val animals by animalViewModel.animals.observeAsState(initial = emptyList())
+
+//    Animal_CascadeDropdownMenu(provenances,animalViewModel,filterState)
+    
+
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
-        .padding(vertical = 60.dp)){
+        .padding(vertical = 80.dp)){
         items(items= animals, itemContent = {
-
-
-                AnimalCard(animal = it)
+                if (filterState.value=="ALL"){
+                    AnimalCard(animal = it)
+                }else if(it.provenance==filterState.value) {
+                    AnimalCard(animal = it)
+                }
 
 
         })
@@ -82,9 +99,12 @@ fun AnimalsScreen(animalViewModel: AnimalViewModel) {
 
 }
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnimalCard(animal: Animal){
-
+    val imageBytes = Base64.getDecoder().decode(animal.image)
+    val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +116,7 @@ fun AnimalCard(animal: Animal){
             Text(text = animal.name, fontWeight = FontWeight.Bold)
         }
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter =  BitmapPainter( decodedImage.asImageBitmap()),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -190,6 +210,57 @@ fun Context.sendMail(to: String, subject: String) {
 //    }
 //}
 
-
-
-
+//@Composable
+//fun Animal_CascadeDropdownMenu(
+//    provenances: List<String>,
+//    animalViewModel: AnimalViewModel,
+//    filterState: MutableState<String>
+//) {
+//
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedText by remember { mutableStateOf("") }
+//    var provenances = provenances.plus("ALL")
+//    var textfieldSize by remember { mutableStateOf(Size.Zero)}
+//
+//    val icon = if (expanded)
+//        Icons.Filled.KeyboardArrowUp
+//    else
+//        Icons.Filled.KeyboardArrowDown
+//
+//
+//    Column(Modifier.padding(10.dp)) {
+//        OutlinedTextField(
+//            value = selectedText,
+//            onValueChange = { selectedText = it },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .onGloballyPositioned { coordinates ->
+//                    //This value is used to assign to the DropDown the same width
+//                    textfieldSize = coordinates.size.toSize()
+//                },
+//            label = {Text("Provincia")},
+//            trailingIcon = {
+//                Icon(icon,"contentDescription",
+//                    Modifier.clickable { expanded = !expanded })
+//            }
+//        )
+//        DropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false },
+//            modifier = Modifier
+//                .width(with(LocalDensity.current){textfieldSize.width.toDp()})
+//        ) {
+//            provenances.forEach { provenance ->
+//                DropdownMenuItem(onClick = {
+//                    selectedText = provenance
+//                    filterState.
+////                    animalViewModel.filterByProvenance(provenance)
+//                    expanded = false
+//                }) {
+//                    Text(text = provenance)
+//                }
+//            }
+//        }
+//    }
+//
+//}

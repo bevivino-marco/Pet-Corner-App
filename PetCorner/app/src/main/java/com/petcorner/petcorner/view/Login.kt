@@ -41,7 +41,7 @@ fun Login(navController: NavController){
         val password = remember { mutableStateOf(TextFieldValue()) }
 
         Image(
-            painter = painterResource(id = R.drawable.ic_action_name),
+            painter = painterResource(id = R.drawable.ic_action_name_foreground),
             contentDescription = "logo",
             modifier = Modifier
                 .size(150.dp)

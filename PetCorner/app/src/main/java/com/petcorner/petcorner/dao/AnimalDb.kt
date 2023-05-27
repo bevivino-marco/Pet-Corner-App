@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.petcorner.petcorner.model.Animal
 
-@Database(entities = [Animal::class], version = 2, exportSchema = false)
+@Database(entities = [Animal::class], version = 3, exportSchema = false)
 abstract class AnimalDb: RoomDatabase() {
 
     abstract  val animalDao: AnimalDao

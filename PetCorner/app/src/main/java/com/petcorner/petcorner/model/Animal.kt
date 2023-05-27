@@ -1,9 +1,11 @@
 package com.petcorner.petcorner.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 @Entity(tableName = "animal_table")
 data class Animal(
     @PrimaryKey(autoGenerate = true)
@@ -16,7 +18,8 @@ data class Animal(
     val owner: String,
     val provenance: String,
     val microchip: String,
-    val sex: String
+    val sex: String,
+    val image: String
 
 ){
     override fun toString(): String{

@@ -6,6 +6,7 @@ import com.petcorner.petcorner.model.Animal
 class AnimalRepository(private  val dao: AnimalDao) {
 
     val getAllAnimals: LiveData<List<Animal>> = dao.getAllAnimal()
+    val provenances: LiveData<List<String>> = dao.getProvenances()
 
     fun addAnimal(animal: Animal){
 
@@ -14,5 +15,8 @@ class AnimalRepository(private  val dao: AnimalDao) {
     }
 
 
+    fun setAnimals(animals: List<Animal>) {
+        dao.insertAnimals(animals = animals)
+    }
 
 }
