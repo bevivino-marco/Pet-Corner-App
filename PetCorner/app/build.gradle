@@ -50,6 +50,11 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -81,6 +86,14 @@ dependencies {
     implementation "me.saket.cascade:cascade:2.0.0-rc01"
     // Jetpack Compose
     implementation "me.saket.cascade:cascade-compose:2.0.0-rc01"
+
+    //okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
 
 }

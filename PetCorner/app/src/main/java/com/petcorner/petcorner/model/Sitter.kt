@@ -7,22 +7,25 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity(tableName = "animal_table",  indices =[Index(value= ["id", "microchip"], unique = true )])
-data class Animal(
+@Entity(tableName = "sitter_table", indices =[Index(value= ["id", "email"], unique = true )])
+data class Sitter(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
-    val age: Int,
-    val size: Int,
-    val type: String,
-    val description: String,
-    val owner: String,
-    val provenance: String,
-    val microchip: String,
-    val sex: String,
+    val name: String,    
+    val surname: String ,
+    val age: Int ,
+    val locality: String ,
+    val personalDescription: String ,
+    val animalsAllowed: String ,
+    val sizeAllowed: Int ,
+    val serviceOffered: String ,
+    val email: String ,
     val image: String
 
-){
+) {
+
+
+
     override fun toString(): String{
         return name
     }
@@ -30,13 +33,14 @@ data class Animal(
 
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
-            "$provenance",
-            "${provenance.first()}",
+            "$name",
+            "${name.first()}",
         )
 
         return matchingCombinations.any {
             it.contains(query, ignoreCase = true)
         }
     }
+
 
 }

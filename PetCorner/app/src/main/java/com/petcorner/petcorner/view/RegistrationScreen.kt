@@ -2,41 +2,95 @@ package com.petcorner.petcorner.view
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.DatePicker
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.petcorner.petcorner.model.Profile
+import com.petcorner.petcorner.viewmodel.ProfileViewModel
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.util.*
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegistrationScreen(navController: NavHostController) {
+    val viewModel = viewModel<ProfileViewModel>()
+    val username = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val city = remember { mutableStateOf("") }
+    val age = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf("") }
+    val providerId = "local"
+    val cod_fisc = remember { mutableStateOf("") }
+    val piva = remember { mutableStateOf("") }
+    val country = remember { mutableStateOf("") }
+    val address = remember { mutableStateOf("") }
+    val image = remember { mutableStateOf("") }
+    val isSitter = ""
+    val isTrainer = ""
+//    val bm = BitmapFactory.decodeFile("/imgprova.png")
+//    val baos = ByteArrayOutputStream()
+//    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
+//    val b: ByteArray = baos.toByteArray()
+//    val encodedImage: String = Base64.getEncoder().encodeToString(b)
+    val coroutineScope = rememberCoroutineScope()
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val baos = ByteArrayOutputStream()
+    bitmap.value?.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
+    val b: ByteArray = baos.toByteArray()
+    val encodedImage: String = Base64.getEncoder().encodeToString(b)
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            imageUri = uri
+        }
+
     Column(
-        modifier = Modifier.padding(20.dp),
+        modifier = Modifier
+            .padding(20.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val username = remember { mutableStateOf(TextFieldValue()) }
-        val password = remember { mutableStateOf(TextFieldValue()) }
-        val city = remember { mutableStateOf(TextFieldValue()) }
-        val age = remember { mutableStateOf(TextFieldValue()) }
-        val isSitter = ""
-        val isTrainer = ""
 
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Nome") },
+            value = name.value,
+            onValueChange = { name.value = it })
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Username") },
@@ -54,8 +108,33 @@ fun RegistrationScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Cittá") },
-            value = username.value,
-            onValueChange = { username.value = it })
+            value = city.value,
+            onValueChange = { city.value = it })
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Paese") },
+            value = country.value,
+            onValueChange = { country.value = it })
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Indirizzo") },
+            value = address.value,
+            onValueChange = { address.value = it })
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Codice Fiscale") },
+            value = cod_fisc.value,
+            onValueChange = { cod_fisc.value = it })
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Partita Iva") },
+            value = piva.value,
+            onValueChange = { piva.value = it })
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text(text = "Etá") },
+            value = age.value,
+            onValueChange = { age.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
         ShowDatePicker(LocalContext.current)
@@ -66,10 +145,83 @@ fun RegistrationScreen(navController: NavHostController) {
             SitterCheckBox()
         }
 
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Surface(
+                modifier = Modifier
+                    .size(154.dp)
+                    .padding(5.dp),
+                shape = CircleShape,
+                border = BorderStroke(0.5.dp, Color.LightGray),
+                elevation = 4.dp,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+            ) {
+                imageUri?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                    } else {
+                        val source = ImageDecoder.createSource(context.contentResolver, it)
+                        bitmap.value = ImageDecoder.decodeBitmap(source)
+                    }
+
+                    bitmap.value?.let { btm ->
+                        Image(
+                            bitmap = btm.asImageBitmap(),
+                            contentDescription = "profile image",
+                            modifier = Modifier.size(135.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+            Button(onClick = { launcher.launch("image/*") }) {
+                Text(text = "Pick Image")
+            }
+        }
+
+
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { navController.navigate("profile") },
+                onClick = {
+//                    val p = Profile(
+//                        id=0,
+//                        name = name.value,
+//                        username = username.value,
+//                        age = age.value.toInt(),
+//                        password = password.value,
+//                        cod_fisc = cod_fisc.value,
+//                        piva = piva.value,
+//                        country = country.value,
+//                        city = city.value,
+//                        address = address.value,
+//                        image =encodedImage ,
+//                        providerId= "local",
+//                        token = ""
+//                    )
+                    val p = Profile(
+                        id=0,
+                        name = "name",
+                        username = "marf@mail.com",
+                        age = 15,
+                        password ="password",
+                        cod_fisc = "sgouhsrgo",
+                        piva = "asogo",
+                        country = "countre",
+                        city = "sgrouhj",
+                        address = "sjrlgn",
+                        image =encodedImage ,
+                        providerId= "local",
+                        token = "grrg"
+                    )
+
+                    coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
+
+    },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,6 +230,8 @@ fun RegistrationScreen(navController: NavHostController) {
                 Text(text = "Registrati")
             }
         }
+        Spacer(modifier = Modifier.height(60.dp))
+
     }
 }
 
@@ -120,4 +274,64 @@ fun ShowDatePicker(context: Context){
             Text(text = "${date.value}")
         }
     }
+}
+
+//
+//@Composable
+//fun RegistrationImage(imageUri: Uri) {
+//
+//    var imageUri by remember { mutableStateOf<Uri?>(null) }
+//    val context = LocalContext.current
+//    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+//
+//    val launcher =
+//        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+//            imageUri = uri
+//        }
+//
+//    Column(
+//        modifier = Modifier.fillMaxWidth(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//
+//        Surface(
+//            modifier = Modifier
+//                .size(154.dp)
+//                .padding(5.dp),
+//            shape = CircleShape,
+//            border = BorderStroke(0.5.dp, Color.LightGray),
+//            elevation = 4.dp,
+//            color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+//        ) {
+//            imageUri?.let {
+//                if (Build.VERSION.SDK_INT < 28) {
+//                    bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+//                } else {
+//                    val source = ImageDecoder.createSource(context.contentResolver, it)
+//                    bitmap.value = ImageDecoder.decodeBitmap(source)
+//                }
+//
+//                bitmap.value?.let { btm ->
+//                    Image(
+//                        bitmap = btm.asImageBitmap(),
+//                        contentDescription = "profile image",
+//                        modifier = Modifier.size(135.dp),
+//                        contentScale = ContentScale.Crop
+//                    )
+//                }
+//            }
+//        }
+//        Button(onClick = { launcher.launch("image/*") }) {
+//            Text(text = "Pick Image")
+//        }
+//    }
+//
+//}
+//
+
+
+
+suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel, path: String?){
+    viewModel.addUser(profile = profile, path)
 }

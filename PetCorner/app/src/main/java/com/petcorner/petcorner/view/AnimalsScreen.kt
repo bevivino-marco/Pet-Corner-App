@@ -1,5 +1,6 @@
 package com.petcorner.petcorner.view
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -9,29 +10,26 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.petcorner.petcorner.model.Animal
 import com.petcorner.petcorner.viewmodel.AnimalViewModel
 import java.util.*
@@ -45,13 +43,15 @@ import java.util.*
 //        Text(text = "Animals screen")
 //    }
 //}
+@SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnimalsScreen(animalViewModel: AnimalViewModel) {
     var filterState = remember { mutableStateOf("ALL") }
-    val animals by animalViewModel.animals.observeAsState(initial = emptyList())
-    val provenances by animalViewModel.provenances.observeAsState(initial = emptyList<String>())
-
+    val viewModel = viewModel<AnimalViewModel>()
+    val searchText by viewModel.searchText.collectAsState()
+    val animals by viewModel.animals.collectAsState().value.observeAsState(emptyList())
+    val isSearching by viewModel.isSearching.collectAsState()
 //    val animals =  listOf<AnimalPost>(
 //        AnimalPost(123, "Lullu",2, "2", 2254, "Torino", true, false),
 //        AnimalPost(123, "Lullu",2, "2", 2254, "Torino", true, false),
@@ -69,23 +69,27 @@ fun AnimalsScreen(animalViewModel: AnimalViewModel) {
 //    );
 
 //    Animal_CascadeDropdownMenu(provenances,animalViewModel,filterState)
-    
 
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 80.dp)){
-        items(items= animals, itemContent = {
-                if (filterState.value=="ALL"){
+
+        TextField(
+            value = searchText,
+            onValueChange = viewModel::onSearchTextChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(text = "Search") }
+        )
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 80.dp)){
+            items(items= animals, itemContent = {
                     AnimalCard(animal = it)
-                }else if(it.provenance==filterState.value) {
-                    AnimalCard(animal = it)
-                }
 
 
-        })
+
+            })
 
 
-    }
+        }
+
 
 //    Box(
 //        modifier = Modifier.fillMaxSize(),

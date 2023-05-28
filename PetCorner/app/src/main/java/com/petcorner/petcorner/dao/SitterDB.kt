@@ -4,18 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.petcorner.petcorner.model.Animal
+import com.petcorner.petcorner.model.Sitter
 
-@Database(entities = [Animal::class], version = 4, exportSchema = false)
-abstract class AnimalDb: RoomDatabase() {
+@Database(entities = [Sitter::class], version = 1, exportSchema = false)
+abstract class SitterDB: RoomDatabase() {
 
-    abstract  val animalDao: AnimalDao
+    abstract  val sitterDao: SitterDao
 
     companion object{
         @Volatile
-        private  var INSTANCE: AnimalDb? = null
+        private  var INSTANCE: SitterDB? = null
 
-        fun getDatabase( context : Context): AnimalDb{
+        fun getDatabase( context : Context): SitterDB{
             val tempInstance =  INSTANCE
             if (tempInstance!= null){
                 return  tempInstance
@@ -23,14 +23,12 @@ abstract class AnimalDb: RoomDatabase() {
             synchronized(this){
                 val instance= Room.databaseBuilder(
                     context.applicationContext,
-                    AnimalDb::class.java,
-                    "animal_database"
+                    SitterDB::class.java,
+                    "sitter_database"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE= instance
                 return instance
             }
         }
     }
-
-
 }
