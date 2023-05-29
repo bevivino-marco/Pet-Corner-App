@@ -3,6 +3,7 @@ package com.petcorner.petcorner.service
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.Environment
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import androidx.annotation.RequiresApi
@@ -53,8 +54,14 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
         val b = baos.toByteArray()
         val client = OkHttpClient()
         val mediaType = "text/plain".toMediaType()
+//        val pathFile: File = Environment.getExternalStoragePublicDirectory(
+//            Environment.DIRECTORY_PICTURES
+//        )
+//        val file = File(pathFile, path)
+
         val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("image", path, File(path).asRequestBody("application/octet-stream".toMediaType()))
+//            .addFormDataPart("image", path, File(path).asRequestBody("application/octet-stream".toMediaType()))
+            .addFormDataPart("image", profile.image)
             .addFormDataPart("address",profile.address)
             .addFormDataPart("city", profile.city )
             .addFormDataPart("country", profile.country )
