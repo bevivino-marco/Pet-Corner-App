@@ -204,9 +204,9 @@ fun RegistrationScreen(navController: NavHostController) {
 //                        token = ""
 //                    )
                     val p = Profile(
-                        id=0,
+                        id=(Math.random()*1000).toInt(),
                         name = "name",
-                        username = "marf@mail.com",
+                        username = "marf23@mail.com",
                         age = 15,
                         password ="password",
                         cod_fisc = "sgouhsrgo",
@@ -220,7 +220,7 @@ fun RegistrationScreen(navController: NavHostController) {
                     )
 
                     coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
-
+                    navController.navigate("login")
     },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier

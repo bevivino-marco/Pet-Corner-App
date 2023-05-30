@@ -73,20 +73,7 @@ class AnimalViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-//    fun filterByProvenance(provenance: String){
-//        if (provenance== "ALL"){
-//            animals= repository.getAllAnimals
-//        }else {
-//            animals = Transformations.map(animals){ it ->
-//                it.filter {                 it.provenance.toLowerCase().equals(
-//                    provenance.toLowerCase(
-//
-//                    )
-//                ) }
-//            }
-//        }
-//        System.out.println(animals.value.toString())
-//    }
+
 
 
     fun onSearchTextChange(text: String) {

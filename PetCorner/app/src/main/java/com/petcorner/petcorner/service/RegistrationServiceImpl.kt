@@ -27,9 +27,9 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
 
 
     override suspend fun getInfo(email:String, token: String): Profile? {
-        try {
+        return try {
 
-            return httpClient.get {
+            httpClient.get {
                 url(HttpRoute.PROFILE_BASE_URL + "/user-info/${email}")
                 headers {
                     append(HttpHeaders.Accept, "*/*")
@@ -39,7 +39,7 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
 
         } catch (e: ResponseException) {
             println("Error in the profile info call: ${e.message}")
-            return null
+            null
         }
     }
 
@@ -54,13 +54,8 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
         val b = baos.toByteArray()
         val client = OkHttpClient()
         val mediaType = "text/plain".toMediaType()
-//        val pathFile: File = Environment.getExternalStoragePublicDirectory(
-//            Environment.DIRECTORY_PICTURES
-//        )
-//        val file = File(pathFile, path)
 
         val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-//            .addFormDataPart("image", path, File(path).asRequestBody("application/octet-stream".toMediaType()))
             .addFormDataPart("image", profile.image)
             .addFormDataPart("address",profile.address)
             .addFormDataPart("city", profile.city )
@@ -74,10 +69,11 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
             .addFormDataPart("piva", profile.piva )
             .build()
         val request = Request.Builder()
-            .url(HttpRoute.PROFILE_BASE_URL+"/user/save/add-user")
+            .url(HttpRoute.PROFILE_BASE_URL+"/animal/add-animal-adopt-queue")
             .post(body)
             .build()
         val response = client.newCall(request).execute()
+        println(response.message)
     }
 
 //    @OptIn(InternalAPI::class)

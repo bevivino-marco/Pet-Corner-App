@@ -10,6 +10,8 @@ import io.ktor.client.features.logging.*
 interface AnimalService {
 
     suspend fun getAnimals(): List<Animal>
+    suspend fun getAnimalsForUser(email: String): List<Animal>
+    suspend fun AddAnimal(animal:Animal, token: String)
 
     companion object{
         fun create():AnimalService{

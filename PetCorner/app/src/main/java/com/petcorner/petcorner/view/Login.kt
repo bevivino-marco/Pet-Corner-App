@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.petcorner.petcorner.view.functions.onRegisterClick
 import com.petcorner.petcorner.R
+import com.petcorner.petcorner.viewmodel.ProfileViewModel
 
 @Composable
-fun Login(navController: NavController){
+fun Login(navController: NavController, profileViewModel: ProfileViewModel){
 
     Column(
         modifier = Modifier.padding(20.dp),
@@ -62,7 +63,10 @@ fun Login(navController: NavController){
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { },
+                onClick = { navController.navigate("profile")
+
+
+                          },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()

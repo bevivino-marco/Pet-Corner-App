@@ -1,9 +1,11 @@
 package com.petcorner.petcorner
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,17 +18,23 @@ import com.petcorner.petcorner.ui.theme.Navigation
 import com.petcorner.petcorner.ui.theme.PetCornerTheme
 import com.petcorner.petcorner.view.BottomNavigationBar
 import com.petcorner.petcorner.viewmodel.AnimalViewModel
+import com.petcorner.petcorner.viewmodel.ProfileViewModel
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lateinit var animalViewModel: AnimalViewModel
-
-
         animalViewModel = ViewModelProvider(
             this
         ).get(AnimalViewModel::class.java)
+
+        lateinit var profileViewModel: ProfileViewModel
+        profileViewModel = ViewModelProvider(
+            this
+        ).get(ProfileViewModel::class.java)
+
         setContent {
             PetCornerTheme(){
                 val navController = rememberNavController()
@@ -57,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) {
-                    Navigation(navController = navController, animalViewModel)
+                    Navigation(navController = navController, animalViewModel, profileViewModel )
                 }
             }
         }
