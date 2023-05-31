@@ -1,10 +1,7 @@
 package com.petcorner.petcorner.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.petcorner.petcorner.model.Animal
 @Dao
 interface UserAnimalDao {
@@ -19,5 +16,11 @@ interface UserAnimalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAnimals(animals: List<Animal>)
+
+    @Query("DELETE FROM animal_table WHERE id=:id")
+    fun deleteAnimalById(id: Int)
+
+    @Query("DELETE FROM animal_table")
+    fun deleteAllAnimals()
 
 }

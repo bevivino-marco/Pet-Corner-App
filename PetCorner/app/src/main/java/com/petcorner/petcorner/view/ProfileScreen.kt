@@ -23,12 +23,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.petcorner.petcorner.R
 import com.petcorner.petcorner.model.Animal
 import com.petcorner.petcorner.viewmodel.AnimalViewModel
 import com.petcorner.petcorner.viewmodel.ProfileViewModel
@@ -59,7 +57,10 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = { navController.navigate("login") },
+                onClick = {
+                    profileViewModel.logout()
+                    navController.navigate("login")
+                          },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .width(100.dp)
@@ -135,7 +136,7 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
 
                 Spacer(modifier = Modifier.padding(5.dp))
 
-                AnimalCardProfile(animal = animale)
+                AnimalCardProfile(animal = animale, profileViewModel)
             }
 
             Row(
@@ -181,7 +182,7 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AnimalCardProfile(animal: Animal){
+fun AnimalCardProfile(animal: Animal, profileViewModel: ProfileViewModel){
     val imageBytes = Base64.getDecoder().decode(animal.image)
     val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     Column(
@@ -212,7 +213,10 @@ fun AnimalCardProfile(animal: Animal){
         val context = LocalContext.current
 
         Button(
-            onClick = {Toast.makeText(
+            onClick = {
+
+                profileViewModel.deleteAnimalForUser(animal)
+                Toast.makeText(
                 contextForToast,
                 "Animale eliminato",
                 Toast.LENGTH_SHORT

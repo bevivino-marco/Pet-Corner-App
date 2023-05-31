@@ -20,7 +20,8 @@ interface ProfileDao {
     @Insert
     fun addProfile(profile:Profile)
 
-
+    @Query("DELETE FROM profile_table")
+    fun deleteUsers()
 
 
 }

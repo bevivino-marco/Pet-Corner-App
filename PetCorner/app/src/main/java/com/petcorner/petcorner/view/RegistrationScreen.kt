@@ -206,7 +206,7 @@ fun RegistrationScreen(navController: NavHostController) {
                     val p = Profile(
                         id=(Math.random()*1000).toInt(),
                         name = "name",
-                        username = "marf23@mail.com",
+                        username = "marf23tgdm@mail.com",
                         age = 15,
                         password ="password",
                         cod_fisc = "sgouhsrgo",

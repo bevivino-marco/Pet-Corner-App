@@ -16,7 +16,13 @@ class UserAnimalRepository(private  val dao: UserAnimalDao ) {
         dao.insertAnimals(animals = animals)
     }
 
+    fun deleteAnimal(id: Int) {
+        dao.deleteAnimalById(id)
+    }
 
+    fun deleteAnimalsForUser() {
+        dao.deleteAllAnimals()
+    }
 
 
 }

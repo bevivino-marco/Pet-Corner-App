@@ -12,6 +12,7 @@ interface AnimalService {
     suspend fun getAnimals(): List<Animal>
     suspend fun getAnimalsForUser(email: String): List<Animal>
     suspend fun AddAnimal(animal:Animal, token: String)
+    suspend fun deleteAnimal(microchip: String, s: String)
 
     companion object{
         fun create():AnimalService{

@@ -69,7 +69,7 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
             .addFormDataPart("piva", profile.piva )
             .build()
         val request = Request.Builder()
-            .url(HttpRoute.PROFILE_BASE_URL+"/animal/add-animal-adopt-queue")
+            .url(HttpRoute.PROFILE_BASE_URL+"/user/save/add-user")
             .post(body)
             .build()
         val response = client.newCall(request).execute()

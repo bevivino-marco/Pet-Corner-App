@@ -58,13 +58,8 @@ class AnimalServiceImpl(private val httpClient: HttpClient): AnimalService {
         val b = baos.toByteArray()
         val client = OkHttpClient()
         val mediaType = "text/plain".toMediaType()
-//        val pathFile: File = Environment.getExternalStoragePublicDirectory(
-//            Environment.DIRECTORY_PICTURES
-//        )
-//        val file = File(pathFile, path)
 
         val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-//            .addFormDataPart("image", path, File(path).asRequestBody("application/octet-stream".toMediaType()))
             .addFormDataPart("file", animal.image)
             .addFormDataPart("age",animal.age.toString())
             .addFormDataPart("size", animal.size.toString() )
@@ -82,6 +77,22 @@ class AnimalServiceImpl(private val httpClient: HttpClient): AnimalService {
             .addHeader("Authorization", "Bearer $token")
             .build()
         val response = client.newCall(request).execute()
+    }
+
+    override suspend fun deleteAnimal(microchip: String, token: String) {
+        val client = OkHttpClient()
+
+        val body = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("param", microchip )
+
+            .build()
+        val request = Request.Builder()
+            .url(HttpRoute.PROFILE_BASE_URL+"/animal/delete-animal-adopt-queue")
+            .post(body)
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+        val response = client.newCall(request).execute()
+
     }
 
 

@@ -12,5 +12,9 @@ class ProfileRepository(private  val dao: ProfileDao) {
 
     }
 
+    fun deleteUser() {
+        dao.deleteUsers()
+    }
+
 
 }

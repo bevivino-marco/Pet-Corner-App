@@ -43,8 +43,9 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
 
     suspend fun addUser(profile: Profile, path: String?){
-        registrationService.addUser(profile, path)
+
         viewModelScope.launch(Dispatchers.IO) {
+            registrationService.addUser(profile, path)
             dao.addProfile(profile)
         }
     }
@@ -68,7 +69,25 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
     }
 
+    fun deleteAnimalForUser(animal: Animal) {
+        viewModelScope.launch(Dispatchers.IO) {
 
+            animalService.deleteAnimal(animal.microchip
+                , "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU1NjAxMjB9.ac4C6kvGuQyRomhd6LY0F0ysQ83EqQtFsMc4kpNUC6M")
+            userAnimalRepository.deleteAnimal(animal.id)
+        }
+
+
+    }
+
+    fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userAnimalRepository.deleteAnimalsForUser()
+            repository.deleteUser()
+
+        }
+
+    }
 
 
 }
