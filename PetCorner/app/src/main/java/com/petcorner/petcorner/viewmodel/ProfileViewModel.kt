@@ -13,6 +13,7 @@ import com.petcorner.petcorner.model.Profile
 import com.petcorner.petcorner.service.AnimalService
 import com.petcorner.petcorner.service.RegistrationService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,17 +40,12 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     val userInfo = _userInfo.asStateFlow().stateIn(viewModelScope,
         SharingStarted.WhileSubscribed(500),_userInfo.value)
 
-
-
-
     suspend fun addUser(profile: Profile, path: String?){
-
         viewModelScope.launch(Dispatchers.IO) {
             registrationService.addUser(profile, path)
             dao.addProfile(profile)
         }
     }
-
 
     fun getAnimalsProfile(email:String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -64,9 +60,7 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
                 animalService.AddAnimal(animal, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjkwMDAvcHJvZmlsZS92Mi9sb2dpbiIsImV4cCI6MTY4NTQ4MTA5N30.DL4C0DTiR2Gi8ivxFB9MdBlYh_Ct5u3hZ_-ZNFg7U_g")
             userAnimalRepository.addAnimal(animal)
-    }
-
-
+        }
     }
 
     fun deleteAnimalForUser(animal: Animal) {
@@ -76,18 +70,35 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
                 , "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU1NjAxMjB9.ac4C6kvGuQyRomhd6LY0F0ysQ83EqQtFsMc4kpNUC6M")
             userAnimalRepository.deleteAnimal(animal.id)
         }
-
-
     }
 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             userAnimalRepository.deleteAnimalsForUser()
             repository.deleteUser()
-
         }
-
     }
 
-
+    suspend fun login(username: String, psw: String) : Boolean{
+        var result = viewModelScope.async(Dispatchers.IO) {
+            var tmp = false
+            val token = registrationService.loginUser(username, psw)
+            println(token)
+            if(token != null){
+                // get info user
+                val profile = registrationService.getInfo(username, token)
+                if (profile != null) {
+                    // check if exist
+                    if(repository.getProfile(username) != null) {
+                        repository.updateUser(profile)
+                    } else {
+                        repository.addProfile(profile)
+                    }
+                    tmp = true
+                }
+            }
+            return@async tmp
+        }
+        return result.await()
+    }
 }

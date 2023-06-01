@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.petcorner.petcorner.model.Profile
 
 
-@Database(entities = [Profile::class], version = 2, exportSchema = false)
+@Database(entities = [Profile::class], version = 3, exportSchema = false)
 abstract class ProfileDB: RoomDatabase() {
     abstract  val profileDao: ProfileDao
 

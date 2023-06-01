@@ -1,18 +1,11 @@
 package com.petcorner.petcorner.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.petcorner.petcorner.model.Profile
 
 @Dao
 interface ProfileDao {
-
-
-
-
     @Query("SELECT * FROM profile_table")
     fun getInfo(): LiveData<List<Profile>>
 
@@ -23,5 +16,10 @@ interface ProfileDao {
     @Query("DELETE FROM profile_table")
     fun deleteUsers()
 
+    @Transaction
+    @Update
+    fun updateProfile(profile:Profile)
 
+    @Query("SELECT * FROM profile_table WHERE username = :username")
+    fun getProfile(username: String) : Profile?
 }

@@ -179,7 +179,7 @@ fun RegistrationScreen(navController: NavHostController) {
                 }
             }
             Button(onClick = { launcher.launch("image/*") }) {
-                Text(text = "Pick Image")
+                Text(text = "Carica immagine")
             }
         }
 
@@ -216,7 +216,8 @@ fun RegistrationScreen(navController: NavHostController) {
                         address = "sjrlgn",
                         image =encodedImage ,
                         providerId= "local",
-                        token = "grrg"
+                        token = "grrg",
+                        roles = emptyList()
                     )
 
                     coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }

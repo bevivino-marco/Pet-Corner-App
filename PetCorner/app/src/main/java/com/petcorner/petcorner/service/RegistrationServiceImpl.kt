@@ -18,6 +18,7 @@ import io.ktor.util.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
@@ -25,18 +26,17 @@ import java.util.*
 
 class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationService {
 
-
     override suspend fun getInfo(email:String, token: String): Profile? {
         return try {
-
-            httpClient.get {
+            var profile = httpClient.get<Profile> {
                 url(HttpRoute.PROFILE_BASE_URL + "/user-info/${email}")
                 headers {
                     append(HttpHeaders.Accept, "*/*")
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
-
+            profile.token = token
+            profile
         } catch (e: ResponseException) {
             println("Error in the profile info call: ${e.message}")
             null
@@ -76,41 +76,26 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
         println(response.message)
     }
 
-//    @OptIn(InternalAPI::class)
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    override suspend fun addUser(profile:Profile) {
-//        val imageBytes = Base64.getDecoder().decode(profile.image)
-//        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//        val baos = ByteArrayOutputStream()
-//        decodedImage.compress(Bitmap.CompressFormat.PNG, 100, baos)
-//        val b = baos.toByteArray()
-//
-//
-//        try {
-//            httpClient.submitFormWithBinaryData<HttpResponse>(
-//                url = HttpRoute.PROFILE_BASE_URL + "/user/save/add-user",
-//                formData = formData {
-//                    append("image", b)
-//                    append("username",profile.username)
-//                    append("name",profile.name)
-//                    append("password",profile.password)
-//                    append("providerId",profile.providerId)
-//                    append("cod_fisc",profile.cod_fisc)
-//                    append("country",profile.country)
-//                    append("city",profile.city)
-//                    append("address",profile.address)
-//                    append("piva",profile.piva)
-//                    append("age",profile.age)
-//
-//                }
-//
-//
-//            )
-//            println("CALL DONEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-//        }catch (e: Exception){
-//            println("Error in the registration call: ${e.message}")
-//
-//        }
-//    }
-
+    override suspend fun loginUser(username: String, psw: String): String? {
+        return try {
+            val gfgPolicy = ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(gfgPolicy)
+            val client = OkHttpClient()
+            val body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("username", username)
+                .addFormDataPart("password", psw)
+                .build()
+            val request = Request.Builder()
+                .url(HttpRoute.PROFILE_BASE_URL + "/login")
+                .post(body)
+                .build()
+            val response = client.newCall(request).execute()
+            var json = JSONObject(response.body?.string())
+            var token = json.getString("access_token")
+            token
+        } catch (e: ResponseException) {
+            println("Error in the login call: ${e.message}")
+            null
+        }
+    }
 }

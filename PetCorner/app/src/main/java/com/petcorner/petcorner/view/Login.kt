@@ -11,6 +11,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -27,10 +28,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.petcorner.petcorner.view.functions.onRegisterClick
 import com.petcorner.petcorner.R
+import com.petcorner.petcorner.model.Profile
 import com.petcorner.petcorner.viewmodel.ProfileViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun Login(navController: NavController, profileViewModel: ProfileViewModel){
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.padding(20.dp),
@@ -51,7 +55,6 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
             label = { Text(text = "Username") },
             value = username.value,
             onValueChange = { username.value = it })
-
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Password") },
@@ -59,20 +62,20 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password.value = it })
-
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { navController.navigate("profile")
-
-
-                          },
+                enabled = username.value.text != "" && password.value.text != "",
+                onClick = {
+                    coroutineScope.launch {
+                        if(login(profileViewModel, username.value.text, password.value.text))
+                            navController.navigate("profile")
+                    }},
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
             ) {
-
                 Text(text = "Login")
             }
         }
@@ -86,4 +89,8 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
             )
         )
     }
+}
+
+suspend fun login(viewModel: ProfileViewModel, username: String, psw: String) : Boolean{
+    return viewModel.login(username, psw)
 }
