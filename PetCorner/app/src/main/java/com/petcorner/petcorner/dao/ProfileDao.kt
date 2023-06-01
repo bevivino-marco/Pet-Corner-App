@@ -6,8 +6,8 @@ import com.petcorner.petcorner.model.Profile
 
 @Dao
 interface ProfileDao {
-    @Query("SELECT * FROM profile_table")
-    fun getInfo(): LiveData<List<Profile>>
+    @Query("SELECT * FROM profile_table LIMIT 1")
+    fun getInfo(): LiveData<Profile>
 
     @Transaction
     @Insert

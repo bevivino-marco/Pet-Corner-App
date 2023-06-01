@@ -35,8 +35,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     val animals = _animals.asStateFlow().stateIn(viewModelScope,
         SharingStarted.WhileSubscribed(500),_animals.value)
 
-    private val userInfoList: LiveData<List<Profile>> = repository.getAllProfiles
-    private val _userInfo = MutableStateFlow(userInfoList)
+    private val userInfoDao: LiveData<Profile> = repository.getAllProfiles
+    private val _userInfo = MutableStateFlow(userInfoDao)
     val userInfo = _userInfo.asStateFlow().stateIn(viewModelScope,
         SharingStarted.WhileSubscribed(500),_userInfo.value)
 
@@ -53,22 +53,26 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         }
     }
 
-    fun addNewAnimal(animal: Animal){
+    fun addNewAnimal(token: String?, animal: Animal){
         viewModelScope.launch(Dispatchers.IO) {
 //            userInfo.value.value?.get(0)?.token?.let {
 //                animalService.AddAnimal(animal, it) }
 
-            animalService.AddAnimal(animal, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU2NDgxMjR9.agj4NSFV7_KIR1-yK-YdyVufgmhpz5b3_7nWlUouKP8")
-                userAnimalRepository.addAnimal(animal)
+            if (token != null) {
+                animalService.AddAnimal(animal, token)
+            }
+            userAnimalRepository.addAnimal(animal)
         }
     }
 
-    fun deleteAnimalForUser(animal: Animal) {
+    fun deleteAnimalForUser(animal: Animal, token: String?) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            animalService.deleteAnimal(animal.microchip
-                ,"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU2NDgxMjR9.agj4NSFV7_KIR1-yK-YdyVufgmhpz5b3_7nWlUouKP8")
-            userAnimalRepository.deleteAnimal(animal.id)
+            if (token != null) {
+                animalService.deleteAnimal(animal.microchip, token
+                )
+            }
+                userAnimalRepository.deleteAnimal(animal.id)
         }
     }
 
