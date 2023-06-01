@@ -1,7 +1,6 @@
 package com.petcorner.petcorner.model
 
 import androidx.room.*
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString

@@ -58,8 +58,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 //            userInfo.value.value?.get(0)?.token?.let {
 //                animalService.AddAnimal(animal, it) }
 
-                animalService.AddAnimal(animal, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjkwMDAvcHJvZmlsZS92Mi9sb2dpbiIsImV4cCI6MTY4NTQ4MTA5N30.DL4C0DTiR2Gi8ivxFB9MdBlYh_Ct5u3hZ_-ZNFg7U_g")
-            userAnimalRepository.addAnimal(animal)
+            animalService.AddAnimal(animal, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU2NDgxMjR9.agj4NSFV7_KIR1-yK-YdyVufgmhpz5b3_7nWlUouKP8")
+                userAnimalRepository.addAnimal(animal)
         }
     }
 
@@ -67,7 +67,7 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         viewModelScope.launch(Dispatchers.IO) {
 
             animalService.deleteAnimal(animal.microchip
-                , "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU1NjAxMjB9.ac4C6kvGuQyRomhd6LY0F0ysQ83EqQtFsMc4kpNUC6M")
+                ,"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUaGVCcm9ja0BtYWlsLmNvbSIsInJvbGVzIjpbXSwiaXNzIjoiaHR0cDovLzZjOGZmOTc0YmNiMDo5MDAwL3Byb2ZpbGUvdjIvbG9naW4iLCJleHAiOjE2ODU2NDgxMjR9.agj4NSFV7_KIR1-yK-YdyVufgmhpz5b3_7nWlUouKP8")
             userAnimalRepository.deleteAnimal(animal.id)
         }
     }

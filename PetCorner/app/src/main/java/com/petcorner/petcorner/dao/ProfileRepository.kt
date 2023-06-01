@@ -18,7 +18,7 @@ class ProfileRepository(private  val dao: ProfileDao) {
         dao.updateProfile(profile)
     }
 
-    fun getProfile(username: String){
-        dao.getProfile(username)
+    fun getProfile(username: String): Profile? {
+        return dao.getProfile(username)
     }
 }
