@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TrainerCheckBox() {
+fun TrainerCheckBox() : Boolean {
 
     val contextForToast = LocalContext.current.applicationContext
 
@@ -25,7 +25,7 @@ fun TrainerCheckBox() {
             checked = checked,
             onCheckedChange = { checked_ ->
                 checked = checked_
-                if (checked == true)
+                if (checked)
                     Toast.makeText(
                         contextForToast,
                         "Sarai registrato come Trainer",
@@ -45,4 +45,6 @@ fun TrainerCheckBox() {
             text = "Trainer"
         )
     }
+
+    return checked
 }

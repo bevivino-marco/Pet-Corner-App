@@ -27,7 +27,6 @@ data class Profile(
     var token: String? = "",
     var roles: List<String>
     ) {
-
 }
 
 class Converters {

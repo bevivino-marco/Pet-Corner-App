@@ -12,13 +12,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.petcorner.petcorner.BottomNavItem
+import com.petcorner.petcorner.viewmodel.ProfileViewModel
 
 @Composable
 fun BottomNavigationBar(
     items: List<BottomNavItem>,
     navController: NavController,
     modifier: Modifier = Modifier,
-    onItemClick: (BottomNavItem) -> Unit
+    onItemClick: (BottomNavItem) -> Unit,
+    viewModel: ProfileViewModel
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
@@ -30,7 +32,14 @@ fun BottomNavigationBar(
             val selected = item.route == backStackEntry.value?.destination?.route
             BottomNavigationItem(
                 selected = selected,
-                onClick = { onItemClick(item) },
+                onClick = {
+                    // Check if exist token go to profile
+                    if(item.name.equals("Profilo") && viewModel.checkTokenExists()){
+                        navController.navigate("profile")
+                    } else {
+                        onItemClick(item)
+                    }
+                          },
                 selectedContentColor = Color.Yellow,
                 unselectedContentColor = Color.White,
                 icon = {

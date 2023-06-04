@@ -8,9 +8,7 @@ class UserAnimalRepository(private  val dao: UserAnimalDao ) {
     val getAllAnimals: LiveData<List<Animal>> = dao.getAllUserAnimals()
 
     fun addAnimal(animal: Animal){
-
         dao.insertUserAnimal(animal)
-
     }
     fun setAnimals(animals: List<Animal>) {
         dao.insertAnimals(animals = animals)
@@ -23,6 +21,4 @@ class UserAnimalRepository(private  val dao: UserAnimalDao ) {
     fun deleteAnimalsForUser() {
         dao.deleteAllAnimals()
     }
-
-
 }

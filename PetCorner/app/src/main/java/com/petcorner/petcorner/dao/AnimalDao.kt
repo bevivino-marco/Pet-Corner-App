@@ -9,20 +9,15 @@ import com.petcorner.petcorner.model.Animal
 
 @Dao
 interface AnimalDao {
-
-
     @Insert
     fun insertAnimal(animal: Animal)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAnimals(animals: List<Animal>)
 
-
-
     @Query("SELECT * FROM animal_table")
     fun getAllAnimal(): LiveData<List<Animal>>
 
     @Query("SELECT DISTINCT provenance FROM animal_table")
     fun getProvenances(): LiveData<List<String>>
-
 }

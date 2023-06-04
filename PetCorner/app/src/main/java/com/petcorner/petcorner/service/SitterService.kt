@@ -11,16 +11,15 @@ import io.ktor.client.features.logging.*
 interface SitterService {
     suspend fun getSitters(): List<Sitter>
 
+    suspend fun addSitter(sitter: Sitter, token : String): Boolean
+
     companion object{
         fun create():SitterService{
             return SitterServiceImpl(
                 httpClient = HttpClient(Android){
-
                     install(Logging){
                         level= LogLevel.ALL
                     }
-
-
                     install(JsonFeature){
                         serializer = KotlinxSerializer()
                     }
@@ -28,6 +27,4 @@ interface SitterService {
             )
         }
     }
-
-
 }

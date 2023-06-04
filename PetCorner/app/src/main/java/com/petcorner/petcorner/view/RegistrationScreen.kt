@@ -56,13 +56,8 @@ fun RegistrationScreen(navController: NavHostController) {
     val country = remember { mutableStateOf("") }
     val address = remember { mutableStateOf("") }
     val image = remember { mutableStateOf("") }
-    val isSitter = ""
-    val isTrainer = ""
-//    val bm = BitmapFactory.decodeFile("/imgprova.png")
-//    val baos = ByteArrayOutputStream()
-//    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
-//    val b: ByteArray = baos.toByteArray()
-//    val encodedImage: String = Base64.getEncoder().encodeToString(b)
+    var isSitter = false
+    var isTrainer = false
     val coroutineScope = rememberCoroutineScope()
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
@@ -71,8 +66,7 @@ fun RegistrationScreen(navController: NavHostController) {
     bitmap.value?.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
     val b: ByteArray = baos.toByteArray()
     val encodedImage: String = Base64.getEncoder().encodeToString(b)
-    val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
 
@@ -83,9 +77,6 @@ fun RegistrationScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
-
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Nome") },
@@ -135,22 +126,18 @@ fun RegistrationScreen(navController: NavHostController) {
             label = { Text(text = "Etá") },
             value = age.value,
             onValueChange = { age.value = it })
-
         Spacer(modifier = Modifier.height(20.dp))
         ShowDatePicker(LocalContext.current)
-
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            TrainerCheckBox()
-            SitterCheckBox()
+            isTrainer = TrainerCheckBox()
+            isSitter = SitterCheckBox()
         }
-
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Surface(
                 modifier = Modifier
                     .size(154.dp)
@@ -167,7 +154,6 @@ fun RegistrationScreen(navController: NavHostController) {
                         val source = ImageDecoder.createSource(context.contentResolver, it)
                         bitmap.value = ImageDecoder.decodeBitmap(source)
                     }
-
                     bitmap.value?.let { btm ->
                         Image(
                             bitmap = btm.asImageBitmap(),
@@ -182,43 +168,50 @@ fun RegistrationScreen(navController: NavHostController) {
                 Text(text = "Carica immagine")
             }
         }
-
-
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-//                    val p = Profile(
-//                        id=0,
-//                        name = name.value,
-//                        username = username.value,
-//                        age = age.value.toInt(),
-//                        password = password.value,
-//                        cod_fisc = cod_fisc.value,
-//                        piva = piva.value,
-//                        country = country.value,
-//                        city = city.value,
-//                        address = address.value,
-//                        image =encodedImage ,
-//                        providerId= "local",
-//                        token = ""
-//                    )
                     val p = Profile(
-                        id=(Math.random()*1000).toInt(),
-                        name = "name",
-                        username = "marf23tgdm@mail.com",
-                        age = 15,
-                        password ="password",
-                        cod_fisc = "sgouhsrgo",
-                        piva = "asogo",
-                        country = "countre",
-                        city = "sgrouhj",
-                        address = "sjrlgn",
+                        id=0,
+                        name = name.value,
+                        username = username.value,
+                        age = age.value.toInt(),
+                        password = password.value,
+                        cod_fisc = cod_fisc.value,
+                        piva = piva.value,
+                        country = country.value,
+                        city = city.value,
+                        address = address.value,
                         image =encodedImage ,
                         providerId= "local",
-                        token = "grrg",
+                        token = "",
                         roles = emptyList()
                     )
+
+                    /*val p = Profile(
+                        id=101,
+                        name = "lukaku",
+                        username = "lukaku",
+                        age = 5,
+                        password = "123",
+                        cod_fisc = "asd",
+                        piva = "asd",
+                        country = "asd",
+                        city = "asd",
+                        address = "asd",
+                        image = encodedImage ,
+                        providerId= "local",
+                        token = "",
+                        roles = emptyList()
+                    )*/
+
+                    if(isTrainer){
+                        p.roles += "Trainer"
+                    }
+                    if(isSitter){
+                        p.roles += "Sitter"
+                    }
 
                     coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
                     navController.navigate("login")

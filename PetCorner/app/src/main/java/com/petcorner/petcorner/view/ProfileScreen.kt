@@ -35,10 +35,6 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewModel, profileViewModel: ProfileViewModel) {
-//    val nome = "Marco"
-//    val cognome= "Bevivino"
-//    val username = "marco.bevivino@gmail.com"
-//    val citta = "Torino"
     val ruoli = listOf<String>("Trainer", "Sitter")
     val animali = profileViewModel.animals.collectAsState().value.observeAsState(emptyList())
     val user = profileViewModel.userInfo.collectAsState().value.observeAsState()
@@ -53,7 +49,6 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -73,16 +68,12 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
                     contentColor = Color.White
                 )
             ) {
-
                 Text(text = "LOG OUT")
             }
         }
         Spacer(modifier = Modifier.padding(5.dp))
 
-
-        ProfileImage()
-
-
+        user.value?.let { ProfileImage(profile = it) }
 
         if (nome != null) {
             Text(
@@ -131,7 +122,6 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp)
         )
-
 
         Column(
             modifier = Modifier
@@ -203,7 +193,6 @@ fun AnimalCardProfile(animal: Animal, profileViewModel: ProfileViewModel, token:
             .background(Color.White)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-
             Text(text = animal.name, fontWeight = FontWeight.Bold)
         }
         Image(
@@ -232,7 +221,6 @@ fun AnimalCardProfile(animal: Animal, profileViewModel: ProfileViewModel, token:
                 "Animale eliminato",
                 Toast.LENGTH_SHORT
             ).show()
-
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -242,15 +230,12 @@ fun AnimalCardProfile(animal: Animal, profileViewModel: ProfileViewModel, token:
                 backgroundColor = Color.LightGray,
                 contentColor = Color.Black
             )
-
         ) {
             Text(text = "Elimina")
         }
-
         Spacer(modifier = Modifier
             .padding(25.dp)
-            .background(color = Color.DarkGray))
-
-
+            .background(color = Color.DarkGray)
+        )
     }
 }
