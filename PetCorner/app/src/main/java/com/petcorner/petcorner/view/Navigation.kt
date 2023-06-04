@@ -13,7 +13,7 @@ import com.petcorner.petcorner.viewmodel.ProfileViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(navController: NavHostController, animalViewModel: AnimalViewModel, profileViewModel: ProfileViewModel) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "profile") {
         composable("animals") {
             AnimalsScreen(animalViewModel)
         }
@@ -28,6 +28,12 @@ fun Navigation(navController: NavHostController, animalViewModel: AnimalViewMode
         }
         composable("profile") {
             ProfileScreen(navController, animalViewModel, profileViewModel )
+        }
+        composable("profile") {
+            ProfileScreen(navController, animalViewModel, profileViewModel )
+        }
+        composable("add-animal") {
+            NewAnimalForm(navController, animalViewModel, profileViewModel )
         }
 
     }

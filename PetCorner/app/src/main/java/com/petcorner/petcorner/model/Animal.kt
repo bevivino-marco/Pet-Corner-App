@@ -1,5 +1,6 @@
 package com.petcorner.petcorner.model
 
+import androidx.compose.runtime.MutableState
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index

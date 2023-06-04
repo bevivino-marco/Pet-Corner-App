@@ -188,37 +188,38 @@ fun RegistrationScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-//                    val p = Profile(
-//                        id=0,
-//                        name = name.value,
-//                        username = username.value,
-//                        age = age.value.toInt(),
-//                        password = password.value,
-//                        cod_fisc = cod_fisc.value,
-//                        piva = piva.value,
-//                        country = country.value,
-//                        city = city.value,
-//                        address = address.value,
-//                        image =encodedImage ,
-//                        providerId= "local",
-//                        token = ""
-//                    )
                     val p = Profile(
-                        id=(Math.random()*1000).toInt(),
-                        name = "name",
-                        username = "marf23tgdm@mail.com",
-                        age = 15,
-                        password ="password",
-                        cod_fisc = "sgouhsrgo",
-                        piva = "asogo",
-                        country = "countre",
-                        city = "sgrouhj",
-                        address = "sjrlgn",
+                        id=0,
+                        name = name.value,
+                        username = username.value,
+                        age = age.value.toInt(),
+                        password = password.value,
+                        cod_fisc = cod_fisc.value,
+                        piva = piva.value,
+                        country = country.value,
+                        city = city.value,
+                        address = address.value,
                         image =encodedImage ,
                         providerId= "local",
-                        token = "grrg",
+                        token = "",
                         roles = emptyList()
                     )
+//                    val p = Profile(
+//                        id=(Math.random()*1000).toInt(),
+//                        name = "name",
+//                        username = "marf23tgdm@mail.com",
+//                        age = 15,
+//                        password ="password",
+//                        cod_fisc = "sgouhsrgo",
+//                        piva = "asogo",
+//                        country = "countre",
+//                        city = "sgrouhj",
+//                        address = "sjrlgn",
+//                        image =encodedImage ,
+//                        providerId= "local",
+//                        token = "grrg",
+//                        roles = emptyList()
+//                    )
 
                     coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
                     navController.navigate("login")

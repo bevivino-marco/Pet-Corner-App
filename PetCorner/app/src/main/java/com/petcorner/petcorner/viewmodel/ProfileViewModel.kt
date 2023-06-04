@@ -55,11 +55,9 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
     fun addNewAnimal(token: String?, animal: Animal){
         viewModelScope.launch(Dispatchers.IO) {
-//            userInfo.value.value?.get(0)?.token?.let {
-//                animalService.AddAnimal(animal, it) }
 
             if (token != null) {
-                animalService.AddAnimal(animal, token)
+                 animalService.AddAnimal(animal, token)
             }
             userAnimalRepository.addAnimal(animal)
         }
