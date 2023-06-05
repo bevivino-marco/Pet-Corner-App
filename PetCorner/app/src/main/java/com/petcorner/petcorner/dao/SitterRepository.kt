@@ -8,11 +8,8 @@ class SitterRepository(private  val dao: SitterDao) {
     val provenances: LiveData<List<String>> = dao.getCity()
 
     fun addSitter(sitter: Sitter){
-
         dao.insertSitter(sitter)
-
     }
-
 
     fun setSitters(sitters: List<Sitter>) {
         dao.insertSitters(sitters = sitters)

@@ -1,6 +1,5 @@
 package com.petcorner.petcorner.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -21,16 +20,10 @@ data class Sitter(
     val serviceOffered: String ,
     val email: String ,
     val image: String
-
 ) {
-
-
-
     override fun toString(): String{
         return name
     }
-
-
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
             "$name",
@@ -41,6 +34,4 @@ data class Sitter(
             it.contains(query, ignoreCase = true)
         }
     }
-
-
 }

@@ -20,6 +20,12 @@ interface ProfileDao {
     @Update
     fun updateProfile(profile:Profile)
 
+    @Transaction
+    @Query("UPDATE profile_table SET token = :token WHERE username = :username")
+    fun updateToken(token: String, username: String);
+
     @Query("SELECT * FROM profile_table WHERE username = :username")
     fun getProfile(username: String) : Profile?
+
+
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SitterCheckBox() {
+fun SitterCheckBox() : Boolean {
 
     val contextForToast = LocalContext.current.applicationContext
 
@@ -25,7 +25,7 @@ fun SitterCheckBox() {
             checked = checked,
             onCheckedChange = { checked_ ->
                 checked = checked_
-                if (checked == true)
+                if (checked)
                     Toast.makeText(
                         contextForToast,
                         "Sarai registrato come Sitter",
@@ -47,4 +47,6 @@ fun SitterCheckBox() {
             text = "Sitter"
         )
     }
+
+    return checked
 }

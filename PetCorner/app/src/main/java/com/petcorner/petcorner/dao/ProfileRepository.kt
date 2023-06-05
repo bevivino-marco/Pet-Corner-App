@@ -18,6 +18,10 @@ class ProfileRepository(private  val dao: ProfileDao) {
         dao.updateProfile(profile)
     }
 
+    fun updateToken(token: String, username: String){
+        dao.updateToken(token, username)
+    }
+
     fun getProfile(username: String): Profile? {
         return dao.getProfile(username)
     }

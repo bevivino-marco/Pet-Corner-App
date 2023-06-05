@@ -82,9 +82,6 @@ fun AnimalsScreen(animalViewModel: AnimalViewModel) {
             .padding(vertical = 80.dp)){
             items(items= animals, itemContent = {
                     AnimalCard(animal = it)
-
-
-
             })
 
 

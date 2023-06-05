@@ -61,7 +61,8 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             onItemClick = {
                                 navController.navigate(it.route)
-                            }
+                            },
+                            viewModel = profileViewModel
                         )
                     }
                 ) {
