@@ -124,17 +124,8 @@ fun NewAnimalForm(navController: NavHostController, animalViewModel: AnimalViewM
         TextField(
             label = { Text(text = "Taglia") },
             value = size.value,
-            onValueChange = {
+            onValueChange = {size.value=it
 
-                if(it.toLowerCase()=="grande"){
-                    size.value = "3"
-                }else if(it.toLowerCase()=="piccola"){
-                    size.value = "1"
-                }else if(it.toLowerCase()=="media"){
-                    size.value = "2"
-                }else {
-                    size.value = "2"
-                }
 
             })
         Spacer(modifier = Modifier.height(20.dp))
@@ -180,6 +171,15 @@ fun NewAnimalForm(navController: NavHostController, animalViewModel: AnimalViewM
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround) {
 
             Button(onClick = {
+                if(size.value.toLowerCase()=="grande"){
+                    size.value = "3"
+                }else if(size.value.toLowerCase()=="media"){
+                    size.value = "2"
+                }else if(size.value.toLowerCase()=="piccola"){
+                    size.value = "1"
+                }else {
+                    size.value="2"
+                }
 
                 viewModel.addNewAnimal(token = token, animal = Animal(
                         id =(Math.random()*1000).toInt(),

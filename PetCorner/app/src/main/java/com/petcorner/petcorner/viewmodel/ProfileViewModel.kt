@@ -30,6 +30,9 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     private val userAnimalDao = UserAnimalDB.getDatabase(application).userAnimalDao
     private val userAnimalRepository: UserAnimalRepository = UserAnimalRepository(userAnimalDao)
 
+    private val animalDao = AnimalDb.getDatabase(application).animalDao
+    private val animalRepository: AnimalRepository = AnimalRepository(animalDao)
+
     private val sitterDao = SitterDB.getDatabase(application).sitterDao
     private val sitterRepository: SitterRepository = SitterRepository(sitterDao)
 
@@ -99,10 +102,11 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         viewModelScope.launch(Dispatchers.IO) {
 
             if (token != null) {
-                animalService.deleteAnimal(animal.microchip, token
-                )
-            }
+                animalService.deleteAnimal(animal.microchip, token)
                 userAnimalRepository.deleteAnimal(animal.id)
+                animalRepository.deleteAnimal(animal.microchip)
+
+            }
         }
     }
 

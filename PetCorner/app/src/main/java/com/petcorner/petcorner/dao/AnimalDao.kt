@@ -20,4 +20,10 @@ interface AnimalDao {
 
     @Query("SELECT DISTINCT provenance FROM animal_table")
     fun getProvenances(): LiveData<List<String>>
+
+
+    @Query("DELETE FROM animal_table WHERE microchip=:microchip")
+    fun deleteAnimalById(microchip: String)
+
+
 }

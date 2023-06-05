@@ -18,5 +18,8 @@ class AnimalRepository(private  val dao: AnimalDao) {
     fun setAnimals(animals: List<Animal>) {
         dao.insertAnimals(animals = animals)
     }
+    fun deleteAnimal(microchip: String) {
+        dao.deleteAnimalById(microchip)
+    }
 
 }
