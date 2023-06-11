@@ -29,15 +29,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.petcorner.petcorner.model.Profile
 import com.petcorner.petcorner.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.Period
 import java.util.*
 
 
@@ -69,6 +74,8 @@ fun RegistrationScreen(navController: NavHostController) {
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
+
+    var visible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -116,7 +123,7 @@ fun RegistrationScreen(navController: NavHostController) {
             label = { Text(text = "Codice Fiscale") },
             value = cod_fisc.value,
             onValueChange = { cod_fisc.value = it })
-        Spacer(modifier = Modifier.height(20.dp))
+        /*Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Partita Iva") },
             value = piva.value,
@@ -126,8 +133,9 @@ fun RegistrationScreen(navController: NavHostController) {
             label = { Text(text = "Etá") },
             value = age.value,
             onValueChange = { age.value = it })
+        */
         Spacer(modifier = Modifier.height(20.dp))
-        ShowDatePicker(LocalContext.current)
+        val date = ShowDatePicker(LocalContext.current)
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             isTrainer = TrainerCheckBox()
@@ -172,65 +180,35 @@ fun RegistrationScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    val p = Profile(
-                        id=0,
-                        name = name.value,
-                        username = username.value,
-                        age = age.value.toInt(),
-                        password = password.value,
-                        cod_fisc = cod_fisc.value,
-                        piva = piva.value,
-                        country = country.value,
-                        city = city.value,
-                        address = address.value,
-                        image =encodedImage ,
-                        providerId= "local",
-                        token = "",
-                        roles = emptyList()
-                    )
-//                    val p = Profile(
-//                        id=(Math.random()*1000).toInt(),
-//                        name = "name",
-//                        username = "marf23tgdm@mail.com",
-//                        age = 15,
-//                        password ="password",
-//                        cod_fisc = "sgouhsrgo",
-//                        piva = "asogo",
-//                        country = "countre",
-//                        city = "sgrouhj",
-//                        address = "sjrlgn",
-//                        image =encodedImage ,
-//                        providerId= "local",
-//                        token = "grrg",
-//                        roles = emptyList()
-//                    )
+                    try{
+                        val p = Profile(
+                            id=0,
+                            name = name.value,
+                            username = username.value,
+                            age = Period.between(LocalDate.parse(date), LocalDate.now()).years,
+                            password = password.value,
+                            cod_fisc = cod_fisc.value,
+                            piva = "",
+                            country = country.value,
+                            city = city.value,
+                            address = address.value,
+                            image = encodedImage ,
+                            providerId= "local",
+                            token = "",
+                            roles = emptyList()
+                        )
 
-                    /*val p = Profile(
-                        id=101,
-                        name = "lukaku",
-                        username = "lukaku",
-                        age = 5,
-                        password = "123",
-                        cod_fisc = "asd",
-                        piva = "asd",
-                        country = "asd",
-                        city = "asd",
-                        address = "asd",
-                        image = encodedImage ,
-                        providerId= "local",
-                        token = "",
-                        roles = emptyList()
-                    )*/
-
-                    if(isTrainer){
-                        p.roles += "Trainer"
+                        if(isTrainer){
+                            p.roles += "Trainer"
+                        }
+                        if(isSitter){
+                            p.roles += "Sitter"
+                        }
+                        coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
+                        navController.navigate("login")
+                    } catch (e: Exception){
+                        visible = true
                     }
-                    if(isSitter){
-                        p.roles += "Sitter"
-                    }
-
-                    coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
-                    navController.navigate("login")
     },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
@@ -241,12 +219,25 @@ fun RegistrationScreen(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(60.dp))
-
+        MyText2(visible)
     }
 }
 
 @Composable
-fun ShowDatePicker(context: Context){
+fun MyText2(isVisible: Boolean){
+    if(isVisible){
+        Text(
+            "Ops, registrazione fallita: ccntrolla di aver inserito correttamente tutti i dati richiesti",
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Default
+            )
+        )
+    }
+}
+
+@Composable
+fun ShowDatePicker(context: Context): String {
     val year: Int
     val month: Int
     val day: Int
@@ -284,63 +275,8 @@ fun ShowDatePicker(context: Context){
             Text(text = "${date.value}")
         }
     }
+    return date.value
 }
-
-//
-//@Composable
-//fun RegistrationImage(imageUri: Uri) {
-//
-//    var imageUri by remember { mutableStateOf<Uri?>(null) }
-//    val context = LocalContext.current
-//    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-//
-//    val launcher =
-//        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-//            imageUri = uri
-//        }
-//
-//    Column(
-//        modifier = Modifier.fillMaxWidth(),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//
-//        Surface(
-//            modifier = Modifier
-//                .size(154.dp)
-//                .padding(5.dp),
-//            shape = CircleShape,
-//            border = BorderStroke(0.5.dp, Color.LightGray),
-//            elevation = 4.dp,
-//            color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
-//        ) {
-//            imageUri?.let {
-//                if (Build.VERSION.SDK_INT < 28) {
-//                    bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-//                } else {
-//                    val source = ImageDecoder.createSource(context.contentResolver, it)
-//                    bitmap.value = ImageDecoder.decodeBitmap(source)
-//                }
-//
-//                bitmap.value?.let { btm ->
-//                    Image(
-//                        bitmap = btm.asImageBitmap(),
-//                        contentDescription = "profile image",
-//                        modifier = Modifier.size(135.dp),
-//                        contentScale = ContentScale.Crop
-//                    )
-//                }
-//            }
-//        }
-//        Button(onClick = { launcher.launch("image/*") }) {
-//            Text(text = "Pick Image")
-//        }
-//    }
-//
-//}
-//
-
-
 
 suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel, path: String?){
     viewModel.addUser(profile = profile, path)
