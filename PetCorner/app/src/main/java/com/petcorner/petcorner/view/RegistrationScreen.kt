@@ -29,15 +29,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.petcorner.petcorner.model.Profile
 import com.petcorner.petcorner.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -69,6 +75,8 @@ fun RegistrationScreen(navController: NavHostController) {
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
+
+    var visible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -116,7 +124,7 @@ fun RegistrationScreen(navController: NavHostController) {
             label = { Text(text = "Codice Fiscale") },
             value = cod_fisc.value,
             onValueChange = { cod_fisc.value = it })
-        Spacer(modifier = Modifier.height(20.dp))
+        /*Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Partita Iva") },
             value = piva.value,
@@ -126,8 +134,9 @@ fun RegistrationScreen(navController: NavHostController) {
             label = { Text(text = "Etá") },
             value = age.value,
             onValueChange = { age.value = it })
+        */
         Spacer(modifier = Modifier.height(20.dp))
-        ShowDatePicker(LocalContext.current)
+//        val date = ShowDatePicker(LocalContext.current)
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             isTrainer = TrainerCheckBox()
@@ -172,32 +181,38 @@ fun RegistrationScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    val p = Profile(
-                        id=0,
-                        name = name.value,
-                        username = username.value,
-                        age = age.value.toInt(),
-                        password = password.value,
-                        cod_fisc = cod_fisc.value,
-                        piva = piva.value,
-                        country = country.value,
-                        city = city.value,
-                        address = address.value,
-                        image =encodedImage ,
-                        providerId= "local",
-                        token = "",
-                        roles = emptyList()
-                    )
 
-                    if(isTrainer){
-                        p.roles += "Trainer"
-                    }
-                    if(isSitter){
-                        p.roles += "Sitter"
-                    }
+                    try{
+                        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                        val p = Profile(
+                            id=0,
+                            name = name.value,
+                            username = username.value,
+//                            age = Period.between(LocalDate.parse(date, formatter), LocalDate.now()).years,
+                            age = 18,
+                            password = password.value,
+                            cod_fisc = cod_fisc.value,
+                            piva = "",
+                            country = country.value,
+                            city = city.value,
+                            address = address.value,
+                            image = encodedImage ,
+                            providerId= "local",
+                            token = "",
+                            roles = emptyList()
+                        )
 
-                    coroutineScope.launch { sendUser(p,viewModel) }
-                    navController.navigate("login")
+                        if(isTrainer){
+                            p.roles += "Trainer"
+                        }
+                        if(isSitter){
+                            p.roles += "Sitter"
+                        }
+                        coroutineScope.launch { sendUser(p,viewModel) }
+                        navController.navigate("login")
+                    } catch (e: Exception){
+                        visible = true
+                    }
     },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
@@ -208,107 +223,80 @@ fun RegistrationScreen(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(60.dp))
-
+        MyText2(visible)
     }
 }
 
 @Composable
-fun ShowDatePicker(context: Context){
-    val year: Int
-    val month: Int
-    val day: Int
-
-    val calendar = Calendar.getInstance()
-    year = calendar.get(Calendar.YEAR)
-    month = calendar.get(Calendar.MONTH)
-    day = calendar.get(Calendar.DAY_OF_MONTH)
-    calendar.time = Date()
-
-    val date = remember { mutableStateOf("") }
-    val datePickerDialog = DatePickerDialog(
-        context,
-        {_: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            date.value = "$dayOfMonth/$month/$year"
-        }, year, month, day
-    )
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        if (date.value == "") {
-            Text(text = "Data di nascita")
-            Spacer(modifier = Modifier.size(16.dp))
-        }
-        Button(
-            onClick = { datePickerDialog.show() },
-        ) {
-            Icon(
-                Icons.Filled.DateRange,
-                contentDescription = "Favorite",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
+fun MyText2(isVisible: Boolean){
+    if(isVisible){
+        Text(
+            "Ops, registrazione fallita: ccntrolla di aver inserito correttamente tutti i dati richiesti",
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Default
             )
-        }
-        if (date.value != "") {
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(text = "${date.value}")
-        }
+        )
     }
 }
 
-//
 //@Composable
-//fun RegistrationImage(imageUri: Uri) {
+//fun ShowDatePicker(context: Context): String {
+//    val year: Int
+//    val month: Int
+//    val day: Int
 //
-//    var imageUri by remember { mutableStateOf<Uri?>(null) }
-//    val context = LocalContext.current
-//    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+//    val calendar = Calendar.getInstance()
+//    year = calendar.get(Calendar.YEAR)
+//    month = calendar.get(Calendar.MONTH)
+//    day = calendar.get(Calendar.DAY_OF_MONTH)
+//    calendar.time = Date()
+//    var monthCorrect = month.toString()
+//    var dayOfMonthCorrect = day.toString()
+//    val date = remember { mutableStateOf("") }
+//    val datePickerDialog = DatePickerDialog(
+//        context,
+//        {_: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
 //
-//    val launcher =
-//        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-//            imageUri = uri
-//        }
-//
-//    Column(
-//        modifier = Modifier.fillMaxWidth(),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//
-//        Surface(
-//            modifier = Modifier
-//                .size(154.dp)
-//                .padding(5.dp),
-//            shape = CircleShape,
-//            border = BorderStroke(0.5.dp, Color.LightGray),
-//            elevation = 4.dp,
-//            color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
-//        ) {
-//            imageUri?.let {
-//                if (Build.VERSION.SDK_INT < 28) {
-//                    bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-//                } else {
-//                    val source = ImageDecoder.createSource(context.contentResolver, it)
-//                    bitmap.value = ImageDecoder.decodeBitmap(source)
-//                }
-//
-//                bitmap.value?.let { btm ->
-//                    Image(
-//                        bitmap = btm.asImageBitmap(),
-//                        contentDescription = "profile image",
-//                        modifier = Modifier.size(135.dp),
-//                        contentScale = ContentScale.Crop
-//                    )
-//                }
+//            if(month.toString().length<2){
+//                monthCorrect= "0"+monthCorrect
 //            }
+//
+//            if(dayOfMonth.toString().length<2){
+//                dayOfMonthCorrect= "0"+dayOfMonthCorrect
+//            }
+//
+//            date.value = "$dayOfMonth/$month/$year"
+//        }, year, month, day
+//    )
+//
+//    Row(verticalAlignment = Alignment.CenterVertically) {
+//        if (date.value == "") {
+//            Text(text = "Data di nascita")
+//            Spacer(modifier = Modifier.size(16.dp))
 //        }
-//        Button(onClick = { launcher.launch("image/*") }) {
-//            Text(text = "Pick Image")
+//        Button(
+//            onClick = { datePickerDialog.show() },
+//        ) {
+//            Icon(
+//                Icons.Filled.DateRange,
+//                contentDescription = "Favorite",
+//                modifier = Modifier.size(ButtonDefaults.IconSize)
+//            )
+//        }
+//        if (date.value != "") {
+//            Spacer(modifier = Modifier.size(16.dp))
+//            Text(text = "${date.value}")
 //        }
 //    }
-//
+//    return date.value
 //}
-//
+
 
 
 
 suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel){
-    viewModel.addUser(profile = profile, )
+    viewModel.addUser(profile = profile )
+
+
 }

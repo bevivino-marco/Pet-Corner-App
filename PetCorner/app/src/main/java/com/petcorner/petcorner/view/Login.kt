@@ -1,5 +1,6 @@
 package com.petcorner.petcorner.view
 
+import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,10 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -45,12 +43,15 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
         val username = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
 
+        var visible by remember { mutableStateOf(false) }
+
         Image(
             painter = painterResource(id = R.drawable.ic_action_name_foreground),
             contentDescription = "logo",
             modifier = Modifier
                 .size(150.dp)
         )
+        MyText(visible)
         TextField(
             label = { Text(text = "Username") },
             value = username.value,
@@ -68,8 +69,11 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
                 enabled = username.value.text != "" && password.value.text != "",
                 onClick = {
                     coroutineScope.launch {
-                        if(login(profileViewModel, username.value.text, password.value.text))
+                        if(login(profileViewModel, username.value.text, password.value.text)) {
                             navController.navigate("profile")
+                        } else {
+                            visible = true
+                        }
                     }},
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
@@ -83,6 +87,18 @@ fun Login(navController: NavController, profileViewModel: ProfileViewModel){
         ClickableText(
             text = AnnotatedString("Registrati qui"),
             onClick = { onRegisterClick(navController) },
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Default
+            )
+        )
+    }
+}
+@Composable
+fun MyText(isVisible: Boolean){
+    if(isVisible){
+        Text(
+            "Ops, credenziali errate",
             style = TextStyle(
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Default
