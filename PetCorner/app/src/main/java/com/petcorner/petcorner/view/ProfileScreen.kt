@@ -56,7 +56,9 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
         ) {
             Button(
                 onClick = {
-                    profileViewModel.logout()
+                    if (username != null) {
+                        profileViewModel.logout()
+                    }
                     navController.navigate("login")
                           },
                 shape = RoundedCornerShape(50.dp),

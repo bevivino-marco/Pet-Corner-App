@@ -46,12 +46,12 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     val userInfo = _userInfo.asStateFlow().stateIn(viewModelScope,
         SharingStarted.WhileSubscribed(500),_userInfo.value)
 
-    suspend fun addUser(profile: Profile, path: String?){
+    suspend fun addUser(profile: Profile){
         viewModelScope.launch(Dispatchers.IO) {
             val roles = profile.roles
             profile.roles = emptyList()
-            registrationService.addUser(profile, path)
-            repository.addProfile(profile)
+            registrationService.addUser(profile)
+//            repository.addProfile(profile)
             if(roles != emptyList<String>()){
                 if(roles.contains("Sitter")){
                     val token = registrationService.loginUser(profile.username, profile.password)
@@ -113,6 +113,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             userAnimalRepository.deleteAnimalsForUser()
+//            sitterRepository.deleteUserByUsername(username = username)
+//            animalRepository.deleteAnimalByUsername(username = username)
             repository.deleteUser()
         }
     }

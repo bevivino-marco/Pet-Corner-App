@@ -22,4 +22,8 @@ class AnimalRepository(private  val dao: AnimalDao) {
         dao.deleteAnimalById(microchip)
     }
 
+    fun deleteAnimalByUsername(username: String) {
+        dao.deleteAnimalByOwner(username)
+    }
+
 }

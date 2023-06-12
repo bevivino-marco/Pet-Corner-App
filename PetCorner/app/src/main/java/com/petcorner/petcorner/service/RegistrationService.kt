@@ -1,5 +1,6 @@
 package com.petcorner.petcorner.service
 
+import androidx.annotation.RequiresApi
 import com.petcorner.petcorner.model.Profile
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -11,7 +12,7 @@ import kotlinx.serialization.json.Json as KotlinJson
 interface RegistrationService {
 
     suspend fun getInfo(email:String, token:String): Profile?
-    suspend fun addUser(profile: Profile, path: String?)
+    suspend fun addUser(profile: Profile)
     suspend fun loginUser(username: String, psw: String): String?
 
     companion object{
@@ -28,5 +29,6 @@ interface RegistrationService {
             )
         }
     }
+
 
 }

@@ -15,4 +15,8 @@ class SitterRepository(private  val dao: SitterDao) {
         dao.insertSitters(sitters = sitters)
     }
 
+    fun deleteUserByUsername(username:String) {
+        dao.deleteSitterByUsername(username = username)
+    }
+
 }

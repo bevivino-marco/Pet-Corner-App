@@ -44,7 +44,7 @@ class RegistrationServiceImpl(private val httpClient: HttpClient): RegistrationS
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun addUser(profile: Profile, path: String?) {
+    override suspend fun addUser(profile: Profile) {
         val gfgPolicy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(gfgPolicy)
         val imageBytes = Base64.getDecoder().decode(profile.image)

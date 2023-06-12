@@ -188,39 +188,6 @@ fun RegistrationScreen(navController: NavHostController) {
                         token = "",
                         roles = emptyList()
                     )
-//                    val p = Profile(
-//                        id=(Math.random()*1000).toInt(),
-//                        name = "name",
-//                        username = "marf23tgdm@mail.com",
-//                        age = 15,
-//                        password ="password",
-//                        cod_fisc = "sgouhsrgo",
-//                        piva = "asogo",
-//                        country = "countre",
-//                        city = "sgrouhj",
-//                        address = "sjrlgn",
-//                        image =encodedImage ,
-//                        providerId= "local",
-//                        token = "grrg",
-//                        roles = emptyList()
-//                    )
-
-                    /*val p = Profile(
-                        id=101,
-                        name = "lukaku",
-                        username = "lukaku",
-                        age = 5,
-                        password = "123",
-                        cod_fisc = "asd",
-                        piva = "asd",
-                        country = "asd",
-                        city = "asd",
-                        address = "asd",
-                        image = encodedImage ,
-                        providerId= "local",
-                        token = "",
-                        roles = emptyList()
-                    )*/
 
                     if(isTrainer){
                         p.roles += "Trainer"
@@ -229,7 +196,7 @@ fun RegistrationScreen(navController: NavHostController) {
                         p.roles += "Sitter"
                     }
 
-                    coroutineScope.launch { sendUser(p,viewModel, imageUri?.path) }
+                    coroutineScope.launch { sendUser(p,viewModel) }
                     navController.navigate("login")
     },
                 shape = RoundedCornerShape(50.dp),
@@ -342,6 +309,6 @@ fun ShowDatePicker(context: Context){
 
 
 
-suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel, path: String?){
-    viewModel.addUser(profile = profile, path)
+suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel){
+    viewModel.addUser(profile = profile, )
 }

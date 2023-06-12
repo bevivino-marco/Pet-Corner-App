@@ -22,5 +22,7 @@ interface SitterDao {
 
     @Query("SELECT DISTINCT locality FROM sitter_table")
     fun getCity(): LiveData<List<String>>
+    @Query("DELETE FROM sitter_table WHERE email=:username")
+    fun deleteSitterByUsername(username:String)
 
 }
