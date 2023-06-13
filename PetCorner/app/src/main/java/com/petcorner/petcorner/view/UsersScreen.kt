@@ -46,7 +46,7 @@ fun UsersScreen() {
         value = searchText,
         onValueChange = viewModel::onSearchTextChange,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = "Search") }
+        placeholder = { Text(text = "Cerca..") }
     )
     LazyColumn(modifier = Modifier
         .fillMaxWidth()

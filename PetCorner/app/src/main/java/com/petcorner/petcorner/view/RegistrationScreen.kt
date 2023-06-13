@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -77,6 +79,7 @@ fun RegistrationScreen(navController: NavHostController) {
         }
 
     var visible by remember { mutableStateOf(false) }
+    var checked by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -178,11 +181,26 @@ fun RegistrationScreen(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = { checked_ ->
+                    checked = checked_
+                }
+            )
+            Text(
+                modifier = Modifier.padding(start = 2.dp),
+                text = "Conferma di avere almeno 18 anni"
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-
                     try{
+                        if(!checked || name.value == "" || username.value == "" || password.value == ""
+                            || cod_fisc.value == "" || country.value == "" || address.value == "" || city.value == "" ||
+                                encodedImage == null) throw Exception()
                         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                         val p = Profile(
                             id=0,
@@ -222,8 +240,9 @@ fun RegistrationScreen(navController: NavHostController) {
                 Text(text = "Registrati")
             }
         }
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         MyText2(visible)
+        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
@@ -234,7 +253,8 @@ fun MyText2(isVisible: Boolean){
             "Ops, registrazione fallita: ccntrolla di aver inserito correttamente tutti i dati richiesti",
             style = TextStyle(
                 fontSize = 14.sp,
-                fontFamily = FontFamily.Default
+                fontFamily = FontFamily.Default,
+                textAlign = TextAlign.Center
             )
         )
     }
@@ -297,6 +317,4 @@ fun MyText2(isVisible: Boolean){
 
 suspend fun sendUser(profile: Profile, viewModel: ProfileViewModel){
     viewModel.addUser(profile = profile )
-
-
 }

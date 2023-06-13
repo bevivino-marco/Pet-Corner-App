@@ -75,7 +75,7 @@ fun AnimalsScreen(animalViewModel: AnimalViewModel) {
             value = searchText,
             onValueChange = viewModel::onSearchTextChange,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Search") }
+            placeholder = { Text(text = "Cerca..") }
         )
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
@@ -151,7 +151,7 @@ fun AnimalCard(animal: Animal){
             )
 
         ) {
-            Text(text = "contatta")
+            Text(text = "Contatta")
         }
 
         Spacer(modifier = Modifier

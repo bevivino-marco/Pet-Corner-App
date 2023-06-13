@@ -4,12 +4,10 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -101,6 +99,16 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
             )
         }
         Spacer(modifier = Modifier.padding(3.dp))
+        OutlinedButton(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue, contentColor = Color.White),
+            onClick = { navController.navigate("add-animal")},
+            modifier= Modifier.width(200.dp),
+            elevation = ButtonDefaults.elevation(10.dp),
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "add animal")
+            Text(text = "Aggiungi animale")
+        }
+        Spacer(modifier = Modifier.padding(3.dp))
 //        Column(
 //            verticalArrangement = Arrangement.Center,
 //            horizontalAlignment = Alignment.Start
@@ -134,42 +142,13 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             for (animale in animali.value) {
-
                 Spacer(modifier = Modifier.padding(5.dp))
-
                 if (token != null) {
                     AnimalCardProfile(animal = animale, profileViewModel, token)
                 }
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                val contextForToast = LocalContext.current.applicationContext
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Transparent,
-                    ),
-                    onClick = {
-
-                        navController.navigate("add-animal")
         }
-        ) {
-        Icon(imageVector = Icons.Default.Add, contentDescription = "add animal")
-
-
     }
-    }
-
-
-}
-
-
-}
-
 }
 
 

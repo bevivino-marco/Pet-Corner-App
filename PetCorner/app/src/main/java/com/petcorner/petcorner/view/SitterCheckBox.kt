@@ -41,7 +41,6 @@ fun SitterCheckBox() : Boolean {
 
             }
         )
-
         Text(
             modifier = Modifier.padding(start = 2.dp),
             text = "Sitter"
