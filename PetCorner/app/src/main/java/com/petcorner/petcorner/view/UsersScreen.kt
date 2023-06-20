@@ -93,8 +93,6 @@ fun SitterCard(sitter: Sitter){
         )
 
         Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Etá: " + sitter.age, modifier = Modifier.padding(8.dp))
-            Spacer(modifier = Modifier.padding(10.dp))
             Text(text = "Cittá: ${sitter.locality}", modifier = Modifier.padding(start = 8.dp))
         }
         val contextForToast = LocalContext.current.applicationContext

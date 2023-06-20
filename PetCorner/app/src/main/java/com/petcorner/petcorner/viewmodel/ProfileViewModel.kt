@@ -135,6 +135,13 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
                     } else {
                         repository.addProfile(profile)
                     }
+
+                    val repoAnimals: List<Animal> = animalRepository.getAnimalsByUser(username)
+                    for (repoAnimal in repoAnimals){
+                        userAnimalRepository.addAnimal(repoAnimal)
+                    }
+
+
                     tmp = true
                 }
             }

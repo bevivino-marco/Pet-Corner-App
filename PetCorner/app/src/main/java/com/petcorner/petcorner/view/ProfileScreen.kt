@@ -109,24 +109,7 @@ fun ProfileScreen(navController: NavHostController, animalViewModel: AnimalViewM
             Text(text = "Aggiungi animale")
         }
         Spacer(modifier = Modifier.padding(3.dp))
-//        Column(
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.Start
-//        )
-//        {
-//            Text(text = "Ruoli", fontWeight = FontWeight.Bold)
-//            Row() {
-//                var trainerCheck = "No"
-//                var sitterCheck = "No"
-//                if (ruoli.contains("Trainer")) trainerCheck = "SI"
-//                if (ruoli.contains("Sitter")) sitterCheck = "SI"
-//                Text(text = "Trainer: " + trainerCheck)
-//
-//                Spacer(modifier = Modifier.padding(3.dp))
-//
-//                Text(text = "Sitter: " + sitterCheck)
-//            }
-//        }
+
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()

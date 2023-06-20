@@ -26,4 +26,8 @@ class AnimalRepository(private  val dao: AnimalDao) {
         dao.deleteAnimalByOwner(username)
     }
 
+    fun getAnimalsByUser(username: String) : List<Animal> {
+        return dao.getAnimalsByOwner(username)
+    }
+
 }

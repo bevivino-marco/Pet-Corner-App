@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         profileViewModel = ViewModelProvider(
             this
         ).get(ProfileViewModel::class.java)
-
+        profileViewModel.logout()
         setContent {
             PetCornerTheme(){
                 val navController = rememberNavController()

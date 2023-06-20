@@ -24,8 +24,12 @@ interface AnimalDao {
 
     @Query("DELETE FROM animal_table WHERE microchip=:microchip")
     fun deleteAnimalById(microchip: String)
+
     @Query("DELETE FROM animal_table WHERE owner=:owner")
     fun deleteAnimalByOwner(owner: String)
+
+    @Query("SELECT * FROM animal_table WHERE owner=:username")
+    fun getAnimalsByOwner(username: String): List<Animal>
 
 
 }
